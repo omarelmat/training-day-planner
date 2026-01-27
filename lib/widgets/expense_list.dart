@@ -1,10 +1,10 @@
-import 'package:training_day_planner/model/expense.dart';
-import 'package:training_day_planner/widgets/expense_item.dart';
+import 'package:training_day_planner/model/task.dart';
+import 'package:training_day_planner/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseList extends StatelessWidget {
-  final void Function(Expense expense) onRemoveExpense;
-  List<Expense> expenses;
+  final void Function(Task task) onRemoveExpense;
+  final List<Task> expenses;
 
   ExpenseList({
     super.key,
@@ -14,10 +14,8 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return //ListView(children: [...],)
-    ListView.builder(
+    return ListView.builder(
       itemCount: expenses.length,
-
       itemBuilder: (ctx, index) => Dismissible(
         background: Container(
           color: Colors.red.shade600,
@@ -25,7 +23,6 @@ class ExpenseList extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Icon(Icons.delete, color: Colors.white),
         ),
-        //direction: DismissDirection.endToStart,
         secondaryBackground: Container(
           color: Colors.blue.shade600,
           padding: EdgeInsets.only(right: 50),
@@ -36,11 +33,8 @@ class ExpenseList extends StatelessWidget {
         onDismissed: (direction) {
           onRemoveExpense(expenses[index]);
         },
-        child: ExpenseItem(expense: expenses[index]),
+        child: TaskItem(task: expenses[index])
       ),
-      /* itemBuilder: (ctx, index) {
-        return ExpenseItem(expense: expenses[index]);
-      },*/
     );
   }
 }

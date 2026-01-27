@@ -1,5 +1,4 @@
-import 'package:training_day_planner/model/expense.dart';
-import 'package:training_day_planner/widgets/expense_item.dart';
+import 'package:training_day_planner/model/task.dart';
 import 'package:training_day_planner/widgets/expense_list.dart';
 import 'package:training_day_planner/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
@@ -14,43 +13,45 @@ class ExpenseScreen extends StatefulWidget {
 }
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
-  List<Expense> myExpenses = [
-    Expense(
-      title: "Polpa",
-      amount: 2.50,
+  List<Task> myTasks = [
+    Task(
+      id: '1',
+      title: "Kickboxing Session",
+      duration: 45.0,
       date: DateTime.now(),
-      category: Category.food,
+      category: TaskCategory.training,
     ),
-    Expense(
-      title: "English Dictionary",
-      amount: 6.25,
+    Task(
+      id: '2',
+      title: "Code Flutter",
+      duration: 120.0,
       date: DateTime.now(),
-      category: Category.work,
+      category: TaskCategory.work,
     ),
   ];
 
-  void addNewExpense(Expense expense) {
+  void addNewExpense(Task task) {
     setState(() {
-      myExpenses.add(expense);
+      myTasks.add(task);
     });
   }
 
-  void _deleteExpense(Expense expense) {
-    final expenseIndex = myExpenses.indexOf(expense);
+  void _deleteExpense(Task task) {
+    final taskIndex = myTasks.indexOf(task);
 
     setState(() {
-      myExpenses.remove(expense);
+      myTasks.remove(task);
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
-        content: const Text("Expense Deleted"),
+        content: const Text("Task Deleted"),
         action: SnackBarAction(
           label: "Undo",
           onPressed: () {
             setState(() {
-              myExpenses.insert(expenseIndex, expense);
+              myTasks.insert(taskIndex, task);
             });
           },
         ),
@@ -61,8 +62,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   void showAddExpenseOverlay() {
     showModalBottomSheet(
       context: context,
-      //ctx is the context of the bottom sheet
-      //builder: (ctx){return Text("This is where the form will go");},
       builder: (ctx) => NewExpense(submitExpense: addNewExpense),
     );
   }
@@ -70,38 +69,30 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     Widget mainContent = const Center(
-      child: Text("No Expenses found.  Start Adding expenses"),
+      child: Text("No Tasks found. Start Adding tasks"),
     );
 
-    if (myExpenses.isNotEmpty) {
+    if (myTasks.isNotEmpty) {
       mainContent = ExpenseList(
-        expenses: myExpenses,
+        expenses: myTasks,
         onRemoveExpense: _deleteExpense,
       );
     }
     return Scaffold(
       appBar: AppBar(
-        //centerTitle: true,
-        title: Text("Expense Tracker", style: TextStyle(color: Colors.white)),
+        title: Text("Training Day Planner", style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 247, 31, 67),
         actions: [
           IconButton(
             onPressed: showAddExpenseOverlay,
-            icon: Icon(Icons.add, color: Colors.white),
+            icon: Semantics(
+            label: 'Add new task',
+            child: Icon(Icons.add, color: Colors.white),
+            ),
           ),
         ],
       ),
-
       body: mainContent,
-
-      /*Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ...myExpenses.map((exp) {
-            return ExpenseItem(expense: exp);
-          }),
-        ],
-      ),*/
     );
   }
 }

@@ -1,10 +1,14 @@
-import 'package:training_day_planner/model/expense.dart';
+import 'package:training_day_planner/model/task.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart'; 
+
 
 class NewExpense extends StatefulWidget {
-  final void Function(Expense expense) submitExpense;
+  final void Function(Task task) submitExpense;
+
 
   const NewExpense({super.key, required this.submitExpense});
+
 
   @override
   State<NewExpense> createState() {
@@ -12,18 +16,27 @@ class NewExpense extends StatefulWidget {
   }
 }
 
+
 class _NewExpenseState extends State<NewExpense> {
   /*var expenseTitle = "";
+
 
   void _saveExpenseTitle(String value) {
     expenseTitle = value;
   }*/
 
+
   DateTime? _selectedDate;
-  Category _selectedCategory = Category.leisure;
+  TaskCategory _selectedCategory = TaskCategory.training;
+
 
   final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
+  final _durationController = TextEditingController();
+
+
+  String? _photoPath;  
+final ImagePicker _picker = ImagePicker();
+
 
   void _displayDatePicker() async {
     final datePicked = await showDatePicker(
@@ -41,6 +54,7 @@ class _NewExpenseState extends State<NewExpense> {
       _selectedDate = datePicked;
     });
 
+
     /* showDatePicker(
       context: context,
       initialDate: DateTime.now(), //default date shown/selected
@@ -57,20 +71,34 @@ class _NewExpenseState extends State<NewExpense> {
     });*/
   }
 
+
   @override
   void dispose() {
     _titleController.dispose();
-    _amountController.dispose();
+    _durationController.dispose();
     super.dispose();
   }
 
+
+  void _takePicture() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    
+    if (photo != null) {
+      setState(() {
+        _photoPath = photo.path;
+      });
+    }
+  }
+
+
   void _submitExpenseData() {
-    final enteredAmount = double.tryParse(_amountController.text);
+    final enteredDuration = double.tryParse(_durationController.text);
     //tryParse returns null if parsing fails
     //tryParse ('Hello') => null tryParse('12.34') => 12.34
 
-    if (enteredAmount == null ||
-        enteredAmount <= 0 ||
+
+    if (enteredDuration == null ||
+        enteredDuration <= 0 ||
         _titleController.text.trim().isEmpty ||
         _selectedDate == null) {
       showDialog(
@@ -78,7 +106,7 @@ class _NewExpenseState extends State<NewExpense> {
         builder: (ctx) => AlertDialog(
           title: Text("Invalid Input"),
           content: Text(
-            "Please make sure a valid title, amount, date and category was entered.",
+            "Please make sure a valid title, duration, date and category was entered.",
           ),
           actions: [
             TextButton(
@@ -94,16 +122,20 @@ class _NewExpenseState extends State<NewExpense> {
       return;
     }
 
-    //new instance of expense
-    var newExpense = Expense(
+
+    //new instance of task
+    var newTask = Task(
+      id: uuid.v4(),
       title: _titleController.text.trim(),
-      amount: enteredAmount,
+      duration: enteredDuration,
       date: _selectedDate!,
       category: _selectedCategory,
+      photoPath: _photoPath,
     );
-    widget.submitExpense(newExpense);
+    widget.submitExpense(newTask);
     Navigator.pop(context);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,11 +155,11 @@ class _NewExpenseState extends State<NewExpense> {
               Expanded(
                 child: TextField(
                   decoration: InputDecoration(
-                    labelText: 'Amount',
-                    prefixText: '€',
+                    labelText: 'Duration',
+                    suffixText: 'min',
                   ),
                   keyboardType: TextInputType.number,
-                  controller: _amountController,
+                  controller: _durationController,
                 ),
               ),
               Expanded(
@@ -156,7 +188,7 @@ class _NewExpenseState extends State<NewExpense> {
                 width: 120,
                 child: DropdownButton(
                   value: _selectedCategory,
-                  items: Category.values
+                  items: TaskCategory.values
                       .map(
                         (category) => DropdownMenuItem(
                           value: category,
@@ -174,6 +206,15 @@ class _NewExpenseState extends State<NewExpense> {
                   },
                 ),
               ),
+              Spacer(), 
+              // ADDED CAMERA BUTTON HERE:
+              IconButton(
+                onPressed: _takePicture,
+                icon: Icon(Icons.camera_alt),
+              ),
+              if (_photoPath != null)
+                Icon(Icons.check, color: Colors.green),
+
 
               Expanded(
                 child: Row(
@@ -188,7 +229,7 @@ class _NewExpenseState extends State<NewExpense> {
                     SizedBox(width: 5),
                     ElevatedButton(
                       onPressed: _submitExpenseData,
-                      child: Text("Save Expense"),
+                      child: Text("Save Task")
                     ),
                   ],
                 ),
