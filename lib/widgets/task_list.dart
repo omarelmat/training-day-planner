@@ -2,20 +2,20 @@ import 'package:training_day_planner/model/task.dart';
 import 'package:training_day_planner/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseList extends StatelessWidget {
-  final void Function(Task task) onRemoveExpense;
-  final List<Task> expenses;
+class TaskList extends StatelessWidget {  // ← Changed from ExpenseList
+  final void Function(Task task) onRemoveTask;  // ← Changed parameter name
+  final List<Task> tasks;  // ← Changed from expenses
 
-  ExpenseList({
+  TaskList({  // ← Changed from ExpenseList
     super.key,
-    required this.expenses,
-    required this.onRemoveExpense,
+    required this.tasks,  // ← Changed from expenses
+    required this.onRemoveTask,  // ← Changed from onRemoveExpense
   });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: expenses.length,
+      itemCount: tasks.length,  // ← Changed from expenses
       itemBuilder: (ctx, index) => Dismissible(
         background: Container(
           color: Colors.red.shade600,
@@ -29,11 +29,11 @@ class ExpenseList extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: Icon(Icons.delete, color: Colors.white),
         ),
-        key: ValueKey(expenses[index]),
+        key: ValueKey(tasks[index]),  // ← Changed from expenses
         onDismissed: (direction) {
-          onRemoveExpense(expenses[index]);
+          onRemoveTask(tasks[index]);  // ← Changed from onRemoveExpense
         },
-        child: TaskItem(task: expenses[index])
+        child: TaskItem(task: tasks[index]),  // ← Changed from expenses
       ),
     );
   }

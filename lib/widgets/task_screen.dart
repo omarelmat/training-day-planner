@@ -1,25 +1,28 @@
 import 'package:training_day_planner/model/task.dart';
-import 'package:training_day_planner/widgets/expense_list.dart';
-import 'package:training_day_planner/widgets/new_expense.dart';
+import 'package:training_day_planner/widgets/task_list.dart';
+import 'package:training_day_planner/widgets/new_task.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseScreen extends StatefulWidget {
-  const ExpenseScreen({super.key});
+
+class TaskScreen extends StatefulWidget {
+  const TaskScreen({super.key});
+
 
   @override
   State<StatefulWidget> createState() {
-    return _ExpenseScreenState();
+    return _TaskScreenState();
   }
 }
 
-class _ExpenseScreenState extends State<ExpenseScreen> {
+
+class _TaskScreenState extends State<TaskScreen> {
   List<Task> myTasks = [
     Task(
       id: '1',
       title: "Kickboxing Session",
       duration: 45.0,
       date: DateTime.now(),
-      category: TaskCategory.training,
+      category: TaskCategory.fitness,
     ),
     Task(
       id: '2',
@@ -30,18 +33,22 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     ),
   ];
 
-  void addNewExpense(Task task) {
+
+  void addNewTask(Task task) {
     setState(() {
       myTasks.add(task);
     });
   }
 
-  void _deleteExpense(Task task) {
+
+  void _deleteTask(Task task) {
     final taskIndex = myTasks.indexOf(task);
+
 
     setState(() {
       myTasks.remove(task);
     });
+
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -59,32 +66,35 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
   }
 
-  void showAddExpenseOverlay() {
+
+  void showAddTaskOverlay() {
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => NewExpense(submitExpense: addNewExpense),
+      builder: (ctx) => NewTask(submitTask: addNewTask),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
     Widget mainContent = const Center(
-      child: Text("No Tasks found. Start Adding tasks"),
+      child: Text("No Tasks found. Start planning your day!"),
     );
 
+
     if (myTasks.isNotEmpty) {
-      mainContent = ExpenseList(
-        expenses: myTasks,
-        onRemoveExpense: _deleteExpense,
+      mainContent = TaskList(
+        tasks: myTasks,
+        onRemoveTask: _deleteTask,
       );
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text("Training Day Planner", style: TextStyle(color: Colors.white)),
-        backgroundColor: Color.fromARGB(255, 247, 31, 67),
+        title: Text("Day Planner", style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 59, 130, 246),
         actions: [
           IconButton(
-            onPressed: showAddExpenseOverlay,
+            onPressed: showAddTaskOverlay,
             icon: Semantics(
             label: 'Add new task',
             child: Icon(Icons.add, color: Colors.white),

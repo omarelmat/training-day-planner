@@ -6,22 +6,27 @@ import 'package:training_day_planner/notification_helper.dart';
 
 
 
-class NewExpense extends StatefulWidget {
-  final void Function(Task task) submitExpense;
+
+class NewTask extends StatefulWidget {
+  final void Function(Task task) submitTask;
 
 
-  const NewExpense({super.key, required this.submitExpense});
+
+  const NewTask({super.key, required this.submitTask});
+
 
 
   @override
-  State<NewExpense> createState() {
-    return _NewExpenseState();
+  State<NewTask> createState() {
+    return _NewTaskState();
   }
 }
 
 
-class _NewExpenseState extends State<NewExpense> {
+
+class _NewTaskState extends State<NewTask> {
   /*var expenseTitle = "";
+
 
 
   void _saveExpenseTitle(String value) {
@@ -29,16 +34,20 @@ class _NewExpenseState extends State<NewExpense> {
   }*/
 
 
+
   DateTime? _selectedDate;
-  TaskCategory _selectedCategory = TaskCategory.training;
+  TaskCategory _selectedCategory = TaskCategory.work;
+
 
 
   final _titleController = TextEditingController();
   final _durationController = TextEditingController();
 
 
+
   String? _photoPath;  
 final ImagePicker _picker = ImagePicker();
+
 
 
   void _displayDatePicker() async {
@@ -58,6 +67,7 @@ final ImagePicker _picker = ImagePicker();
     });
 
 
+
     /* showDatePicker(
       context: context,
       initialDate: DateTime.now(), //default date shown/selected
@@ -75,12 +85,14 @@ final ImagePicker _picker = ImagePicker();
   }
 
 
+
   @override
   void dispose() {
     _titleController.dispose();
     _durationController.dispose();
     super.dispose();
   }
+
 
 
   void _takePicture() async {
@@ -94,10 +106,12 @@ final ImagePicker _picker = ImagePicker();
   }
 
 
-    void _submitExpenseData() {
+
+    void _submitTaskData() {
     final enteredDuration = double.tryParse(_durationController.text);
     //tryParse returns null if parsing fails
     //tryParse ('Hello') => null tryParse('12.34') => 12.34
+
 
     if (enteredDuration == null ||
         enteredDuration <= 0 ||
@@ -124,6 +138,7 @@ final ImagePicker _picker = ImagePicker();
       return;
     }
 
+
     //new instance of task
     var newTask = Task(
       id: uuid.v4(),
@@ -134,7 +149,7 @@ final ImagePicker _picker = ImagePicker();
       photoPath: _photoPath,
     );
     
-    widget.submitExpense(newTask);
+    widget.submitTask(newTask);
     
     // Close screen FIRST
     Navigator.pop(context);
@@ -145,6 +160,7 @@ final ImagePicker _picker = ImagePicker();
       body: '${newTask.title} - ${newTask.duration.toInt()} minutes',
     );
   }
+
 
 
 
@@ -241,7 +257,7 @@ final ImagePicker _picker = ImagePicker();
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: _submitExpenseData,
+                    onPressed: _submitTaskData,
                     child: Text("Save Task"),
                   ),
                 ],
