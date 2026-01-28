@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "C:\\Users\\Omare\\Desktop\\SDKFlutter\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\scripts\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\Omare\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\Omare\\Downloads\\training-day-planner-main\\training-day-planner-main\\android\\app\\.cxx\\debug\\d1z572eb\\x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\Omare\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\Omare\\Downloads\\training-day-planner-main\\training-day-planner-main\\android\\app\\.cxx\\debug\\d1z572eb\\x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

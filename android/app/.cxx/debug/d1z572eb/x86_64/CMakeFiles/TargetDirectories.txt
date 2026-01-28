@@ -1,0 +1,2 @@
+C:/Users/Omare/Downloads/training-day-planner-main/training-day-planner-main/android/app/.cxx/debug/d1z572eb/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Omare/Downloads/training-day-planner-main/training-day-planner-main/android/app/.cxx/debug/d1z572eb/x86_64/CMakeFiles/rebuild_cache.dir
