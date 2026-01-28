@@ -96,8 +96,8 @@ class _TaskScreenState extends State<TaskScreen> {
           IconButton(
             onPressed: showAddTaskOverlay,
             icon: Semantics(
-            label: 'Add new task',
-            child: Icon(Icons.add, color: Colors.white),
+              label: 'Add new task',
+              child: Icon(Icons.add, color: Colors.white),
             ),
           ),
         ],

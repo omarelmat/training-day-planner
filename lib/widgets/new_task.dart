@@ -1,5 +1,5 @@
 import 'package:training_day_planner/model/task.dart';
-import 'package:intl/intl.dart';  // ← ADD THIS for formatter
+import 'package:intl/intl.dart';  
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; 
 import 'package:training_day_planner/notification_helper.dart';
@@ -258,9 +258,13 @@ final ImagePicker _picker = ImagePicker();
                     child: Text("Cancel"),
                   ),
                   SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: _submitTaskData,
-                    child: Text("Save Task"),
+                  Semantics(
+                      label: "Save new task and return to list",
+                      button: true,
+                      child: ElevatedButton(
+                        onPressed: _submitTaskData,
+                        child: Text("Save Task"),
+                    ),
                   ),
                 ],
               ),
