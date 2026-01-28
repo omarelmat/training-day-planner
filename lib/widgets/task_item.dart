@@ -1,6 +1,6 @@
 import 'package:training_day_planner/model/task.dart';  
 import 'package:flutter/material.dart';
-import 'dart:io'; // ADD THIS IMPORT
+import 'dart:io'; // KEEP THIS
 
 class TaskItem extends StatelessWidget {
   final Task task;
@@ -26,7 +26,7 @@ class TaskItem extends StatelessWidget {
                 Text(task.formattedDate),
               ],
             ),
-            // ADD THIS SECTION FOR IMAGE PREVIEW
+           
             if (task.photoPath != null && task.photoPath!.isNotEmpty)
               Column(
                 children: [

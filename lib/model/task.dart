@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
-const uuid = Uuid();
-final formatter = DateFormat('dd MMMM yyyy');
+enum TaskCategory {
+  work,
+  personal,
+  fitness,
+  training,
+  meal;
 
-enum TaskCategory { work, personal, fitness, training, meal } 
-
-const Map<TaskCategory, IconData> categoryIcons = {
-  TaskCategory.work: Icons.work_outline,         // Briefcase for work
-  TaskCategory.personal: Icons.person_outline,   // Person for personal  
-  TaskCategory.fitness: Icons.fitness_center,    // Dumbbell for fitness
-  TaskCategory.training: Icons.sports_gymnastics, // Gymnastics for training
-  TaskCategory.meal: Icons.restaurant_menu,      // Restaurant for meal
-};
-
-
-
+  String get name {
+    switch (this) {
+      case TaskCategory.work: return 'Work';
+      case TaskCategory.personal: return 'Personal';
+      case TaskCategory.fitness: return 'Fitness';
+      case TaskCategory.training: return 'Training';
+      case TaskCategory.meal: return 'Meal';
+    }
+  }
+}
 
 class Task {
   final String id;
   final String title;
-  final double duration; // minutes instead of amount
+  final double duration;
   final DateTime date;
   final TaskCategory category;
   final String? photoPath;
 
-  const Task({
+  Task({
     required this.id,
     required this.title,
     required this.duration,
@@ -35,10 +35,41 @@ class Task {
     this.photoPath,
   });
 
-  @override
-  String toString() {
-    return formatter.format(date).toString();
+  // Get formatted date for display
+  String get formattedDate {
+    return '${date.day}/${date.month}/${date.year}';
   }
 
-  String get formattedDate => formatter.format(date);
+  // Convert Task to JSON for storage
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'duration': duration,
+      'date': date.toIso8601String(),
+      'category': category.index,
+      'photoPath': photoPath,
+    };
+  }
+
+  // Create Task from JSON
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+      id: json['id'],
+      title: json['title'],
+      duration: (json['duration'] as num).toDouble(),
+      date: DateTime.parse(json['date']),
+      category: TaskCategory.values[json['category']],
+      photoPath: json['photoPath'],
+    );
+  }
 }
+
+// Category icons map (add this outside the class)
+final Map<TaskCategory, IconData> categoryIcons = {
+  TaskCategory.work: Icons.work_outline,
+  TaskCategory.personal: Icons.person_outline,
+  TaskCategory.fitness: Icons.fitness_center,
+  TaskCategory.training: Icons.sports_gymnastics,
+  TaskCategory.meal: Icons.restaurant_menu,
+};
