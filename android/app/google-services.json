@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100963189059",
+    "project_id": "day-planner-4ba4b",
+    "storage_bucket": "day-planner-4ba4b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100963189059:android:54c000a6f2dfde8baa2ff6",
+        "android_client_info": {
+          "package_name": "com.example.training_day_planner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMyeU3y7dQB2Rkfam6jV9e0Npxpq4ADeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
