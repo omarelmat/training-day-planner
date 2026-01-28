@@ -1,6 +1,9 @@
 import 'package:training_day_planner/model/task.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; 
+import 'package:training_day_planner/notification_helper.dart';
+
+
 
 
 class NewExpense extends StatefulWidget {
@@ -91,11 +94,10 @@ final ImagePicker _picker = ImagePicker();
   }
 
 
-  void _submitExpenseData() {
+    void _submitExpenseData() {
     final enteredDuration = double.tryParse(_durationController.text);
     //tryParse returns null if parsing fails
     //tryParse ('Hello') => null tryParse('12.34') => 12.34
-
 
     if (enteredDuration == null ||
         enteredDuration <= 0 ||
@@ -122,7 +124,6 @@ final ImagePicker _picker = ImagePicker();
       return;
     }
 
-
     //new instance of task
     var newTask = Task(
       id: uuid.v4(),
@@ -132,112 +133,122 @@ final ImagePicker _picker = ImagePicker();
       category: _selectedCategory,
       photoPath: _photoPath,
     );
+    
     widget.submitExpense(newTask);
+    
+    // Close screen FIRST
     Navigator.pop(context);
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(25),
-      child: Column(
-        children: [
-          TextField(
-            decoration: InputDecoration(labelText: 'Title'),
-            maxLength: 50,
-            keyboardType: TextInputType.text,
-            //onChanged: _saveExpenseTitle,
-            controller: _titleController,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Duration',
-                    suffixText: 'min',
-                  ),
-                  keyboardType: TextInputType.number,
-                  controller: _durationController,
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      _selectedDate == null
-                          ? 'No Date Selected'
-                          : formatter.format(_selectedDate!).toString(),
-                    ),
-                    IconButton(
-                      onPressed: _displayDatePicker,
-                      icon: Icon(Icons.calendar_month),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Row(
-            children: [
-              SizedBox(
-                width: 120,
-                child: DropdownButton(
-                  value: _selectedCategory,
-                  items: TaskCategory.values
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category.name),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    if (value == null) {
-                      return;
-                    }
-                    setState(() {
-                      _selectedCategory = value;
-                    });
-                  },
-                ),
-              ),
-              Spacer(), 
-              // ADDED CAMERA BUTTON HERE:
-              IconButton(
-                onPressed: _takePicture,
-                icon: Icon(Icons.camera_alt),
-              ),
-              if (_photoPath != null)
-                Icon(Icons.check, color: Colors.green),
-
-
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("Cancel"),
-                    ),
-                    SizedBox(width: 5),
-                    ElevatedButton(
-                      onPressed: _submitExpenseData,
-                      child: Text("Save Task")
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+    
+    // THEN show notification (no await needed)
+    NotificationHelper.showNotification(
+      title: 'Task Saved!',
+      body: '${newTask.title} - ${newTask.duration.toInt()} minutes',
     );
   }
+
+
+
+      @override
+    Widget build(BuildContext context) {
+      return SingleChildScrollView(  // ADDed THIS to make scrollable
+        child: Padding(
+          padding: EdgeInsets.all(25),
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Title'),
+                maxLength: 50,
+                keyboardType: TextInputType.text,
+                controller: _titleController,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Duration',
+                        suffixText: 'min',
+                      ),
+                      keyboardType: TextInputType.number,
+                      controller: _durationController,
+                    ),
+                  ),
+                  SizedBox(width: 10),  
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          _selectedDate == null
+                              ? 'No Date Selected'
+                              : formatter.format(_selectedDate!).toString(),
+                        ),
+                        IconButton(
+                          onPressed: _displayDatePicker,
+                          icon: Icon(Icons.calendar_month),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+        
+              Row(
+                children: [
+                  DropdownButton(  
+                    value: _selectedCategory,
+                    items: TaskCategory.values
+                        .map(
+                          (category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category.name),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value == null) {
+                        return;
+                      }
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    },
+                  ),
+                  SizedBox(width: 10),  // ← Spacing
+                  IconButton(
+                    onPressed: _takePicture,
+                    icon: Icon(Icons.camera_alt),
+                  ),
+                  if (_photoPath != null)
+                    Icon(Icons.check, color: Colors.green),
+                  Spacer(),  // Push buttons to right
+                ],
+              ),
+              
+              SizedBox(height: 20),  // Spacing before buttons
+              
+              // BUTTONS ROW (Separate for clarity)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(  
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel"),
+                  ),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: _submitExpenseData,
+                    child: Text("Save Task"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 }
