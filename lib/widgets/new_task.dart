@@ -239,8 +239,8 @@ final ImagePicker _picker = ImagePicker();
                     onPressed: _takePicture,
                     icon: Icon(Icons.camera_alt),
                   ),
-                  if (_photoPath != null)
-                    Icon(Icons.check, color: Colors.green),
+                  if (_photoPath != null && _photoPath!.isNotEmpty)
+                      Icon(Icons.check, color: Colors.green),
                   Spacer(),  // Push buttons to right
                 ],
               ),
