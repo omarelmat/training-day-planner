@@ -5,14 +5,17 @@ import 'package:uuid/uuid.dart';
 const uuid = Uuid();
 final formatter = DateFormat('dd MMMM yyyy');
 
-enum TaskCategory { training, work, personal, meal, fitness }
+enum TaskCategory { work, personal, fitness, training, meal } 
 
 const Map<TaskCategory, IconData> categoryIcons = {
-  TaskCategory.training: Icons.fitness_center,
-  TaskCategory.work: Icons.code,
-  TaskCategory.personal: Icons.person,
-  TaskCategory.meal: Icons.restaurant,
+  TaskCategory.work: Icons.work_outline,         // Briefcase for work
+  TaskCategory.personal: Icons.person_outline,   // Person for personal  
+  TaskCategory.fitness: Icons.fitness_center,    // Dumbbell for fitness
+  TaskCategory.training: Icons.sports_gymnastics, // Gymnastics for training
+  TaskCategory.meal: Icons.restaurant_menu,      // Restaurant for meal
 };
+
+
 
 
 class Task {
